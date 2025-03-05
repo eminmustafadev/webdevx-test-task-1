@@ -6,9 +6,16 @@
 3. Create `.env` with `GENAI_API_KEY=your_api_key`
 4. Run: `uvicorn app.main:app --reload`
 
+## Testing
+Run all tests:
+```bash
+PYTHONPATH=. pytest tests/ -v
+```
+
+
 ## API Endpoints
 - POST `/projects/`: Create new project
-- GET `/projects/{id}`: Get project status
+- GET `/projects/{id}`: Get project statu
 
 Example:
 ```bash
