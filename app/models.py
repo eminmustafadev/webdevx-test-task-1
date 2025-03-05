@@ -10,7 +10,7 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     project_name = Column(String, index=True)
     location = Column(String)
-    status = Column(String, default="processing")
+    status = Column(String, default="in_progress")
     created_at = Column(DateTime, default=datetime.now(UTC))
     tasks = relationship("Task", back_populates="project")
 

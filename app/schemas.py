@@ -18,6 +18,3 @@ class ProjectResponse(ProjectCreate):
     status: str
     created_at: datetime
     tasks: List[TaskResponse]
-
-    class Config:
-        orm_mode = True

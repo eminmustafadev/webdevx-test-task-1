@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.orm import (
     Session,
     joinedload,
@@ -38,17 +39,19 @@ async def create_project(project: schemas.ProjectCreate, db: Session = Depends(g
 
 @router.get("/projects/{project_id}", response_model=schemas.ProjectResponse)
 def read_project(project_id: int, db: Session = Depends(get_db)):
-    project = db.query(models.Project).options(
-        joinedload(models.Project.tasks)
-    ).get(project_id)
+    stmt = (
+        select(models.Project)
+        .options(joinedload(models.Project.tasks))
+        .where(models.Project.id == project_id)
+    )
+
+    result = db.execute(stmt)
+    project = result.unique().scalars().first()
 
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    return {
-        **project.__dict__,
-        "tasks": [{"name": t.name, "status": t.status} for t in project.tasks]
-    }
+    return project
 
 async def simulate_task_progress(project_id: int):
     await asyncio.sleep(2)
